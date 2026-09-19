@@ -5,6 +5,8 @@ from dataclasses import dataclass
 class Cut:
     length: float
     name: str | None = None
+    width: float | None = None
+    thickness: float | None = None
 
 
 def load_cutlist(file_path):
@@ -22,7 +24,14 @@ def load_cutlist(file_path):
                 if index < len(current_group["names"])
                 else None
             )
-            cut_lengths.append(Cut(current_group["length"], name))
+            cut_lengths.append(
+                Cut(
+                    current_group["length"],
+                    name,
+                    current_group["width"],
+                    current_group["thickness"],
+                )
+            )
 
     with open(file_path, encoding="utf-8") as cutlist_file:
         for line_number, line in enumerate(cutlist_file, start=1):
@@ -44,6 +53,8 @@ def load_cutlist(file_path):
                 current_group = {
                     "count": count,
                     "length": length,
+                    "width": float(values[2]),
+                    "thickness": float(values[3]),
                     "names": [" ".join(values[4:])] if len(values) > 4 else [],
                 }
             elif current_group is not None and values:
