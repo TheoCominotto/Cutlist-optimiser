@@ -1,8 +1,14 @@
 from pathlib import Path
 import sqlite3
+import sys
 
 
-DATABASE_PATH = Path(__file__).parent / "data" / "stock.db"
+PROJECT_PATH = (
+    Path(sys.executable).parent
+    if getattr(sys, "frozen", False)
+    else Path(__file__).parent
+)
+DATABASE_PATH = PROJECT_PATH / "data" / "stock.db"
 
 
 _SCHEMA = """
